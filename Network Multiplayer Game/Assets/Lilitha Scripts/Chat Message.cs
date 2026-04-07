@@ -1,16 +1,14 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 
 public class ChatMessage : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] TextMeshProUGUI messageText;
 
-    // Update is called once per frame
-    void Update()
+    public void SetText(string str)
     {
-        
+        messageText.text = str;
     }
 }
