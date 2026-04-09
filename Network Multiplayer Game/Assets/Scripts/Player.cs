@@ -34,12 +34,30 @@ public class Player : NetworkBehaviour
             return;
         }
 
+        InvokeRepeating(nameof(SetupInput), 0.1f, 0.1f);
+    }
+
+    private void SetupInput()
+    {
+        if (pi == null || moveAction != null)
+        {
+            CancelInvoke(nameof(SetupInput));
+            return;
+        }
+
         moveAction = pi.actions["Move"];
         lookAction = pi.actions["Look"];
+
+        if (moveAction == null || lookAction == null)
+        {
+            return;
+        }
+
         moveAction.Enable();
         lookAction.Enable();
-
         if (playerCamera) playerCamera.enabled = true;
+
+        CancelInvoke(nameof(SetupInput));
     }
 
     private void Update()
