@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,6 +23,13 @@ public class Player : NetworkBehaviour
     private CharacterController cc;
 
     private float pitch;
+
+    [Header("PickUp")]
+    private bool isHolding;
+    [SerializeField] private Transform rayPoint;
+    [SerializeField] private float grabRange = 2.5f;
+    private NetworkRigidbody heldObject;
+    [SerializeField] private Transform holdPosition;
 
     public override void OnNetworkSpawn()
     {
@@ -57,6 +65,14 @@ public class Player : NetworkBehaviour
     {
         lookInput = context.ReadValue<Vector2>() * lookSensitivity;
     }
+
+    public void OnPickUp(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            HandlePickUp();
+        }
+    }
     private void Update()
     {
         HandleMovement();
@@ -88,5 +104,38 @@ public class Player : NetworkBehaviour
         pitch -= lookInput.y;
         pitch = Mathf.Clamp(pitch, -maxPitch, maxPitch);
         cameraPivot.localEulerAngles = new Vector3(pitch, 0f, 0f);
+    }
+
+    private void HandlePickUp()
+    {
+        Debug.Log("Pick up input works");
+
+        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        int layerMask = LayerMask.GetMask("PickUp");
+        RaycastHit hit;
+        bool didHit = Physics.Raycast(ray, out hit, grabRange, layerMask);
+        Debug.DrawRay(ray.origin, ray.direction * grabRange, Color.red, 3f);
+        if (didHit)
+        {
+            if(hit.collider != null)
+            {
+                NetworkRigidbody networkRb = hit.collider.GetComponent<NetworkRigidbody>();
+                if (networkRb != null)
+                {
+                    isHolding = true;
+                    heldObject = networkRb;
+                    networkRb.SetIsKinematic(true);
+                    networkRb.transform.position = holdPosition.transform.position;
+                    networkRb.transform.rotation = holdPosition.transform.rotation;
+                    networkRb.transform.parent = holdPosition;
+                }
+            }
+            
+        }
+    }
+
+    private void HandleDrop()
+    {
+        Debug.Log("dropping input works");
     }
 }
