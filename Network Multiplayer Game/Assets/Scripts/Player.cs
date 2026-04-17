@@ -90,7 +90,7 @@ public class Player : NetworkBehaviour
             verticalVelocity += gravity * Time.deltaTime;
         }
 
-        Vector3 move = transform.forward * moveInput.x + transform.right * moveInput.y;
+        Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
         move.y = verticalVelocity;
 
         cc.Move(move * moveSpeed * Time.deltaTime);
