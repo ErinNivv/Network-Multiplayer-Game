@@ -924,11 +924,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 1
   windowsGamepadBackendHint: 0
-  cloudProjectId: 69e52888-3291-454d-8bfd-90c4fb7c5b63
+  cloudProjectId: d6a5c79e-fefa-4f41-a8ff-dbfb4a323be5
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Network Multiplayer Game
-  organizationId: erinn09
+  projectName: Classwork Network Multiplayer
+  organizationId: lilithaaa-t
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
