@@ -29,6 +29,8 @@ public class Menu : MonoBehaviour
         ushort port = GetPort();
         transport.SetConnectionData("0.0.0.0", port);
 
+        networkManager.StartHost();
+
         networkManager.SceneManager.LoadScene("EscapeRoom", LoadSceneMode.Single);
     }
 
