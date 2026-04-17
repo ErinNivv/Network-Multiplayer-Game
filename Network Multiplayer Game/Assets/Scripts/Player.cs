@@ -28,7 +28,7 @@ public class Player : NetworkBehaviour
     private bool isHolding;
     [SerializeField] private Transform rayPoint;
     [SerializeField] private float grabRange = 2.5f;
-    private NetworkRigidbody heldObject;
+    private NetworkObject heldObject;
     [SerializeField] private Transform holdPosition;
 
     public override void OnNetworkSpawn()
@@ -70,7 +70,7 @@ public class Player : NetworkBehaviour
     {
         if(context.performed)
         {
-            HandlePickUp();
+           // HandlePickUp();
         }
     }
     private void Update()
@@ -104,38 +104,5 @@ public class Player : NetworkBehaviour
         pitch -= lookInput.y;
         pitch = Mathf.Clamp(pitch, -maxPitch, maxPitch);
         cameraPivot.localEulerAngles = new Vector3(pitch, 0f, 0f);
-    }
-
-    private void HandlePickUp()
-    {
-        Debug.Log("Pick up input works");
-
-        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-        int layerMask = LayerMask.GetMask("PickUp");
-        RaycastHit hit;
-        bool didHit = Physics.Raycast(ray, out hit, grabRange, layerMask);
-        Debug.DrawRay(ray.origin, ray.direction * grabRange, Color.red, 3f);
-        if (didHit)
-        {
-            if(hit.collider != null)
-            {
-                NetworkRigidbody networkRb = hit.collider.GetComponent<NetworkRigidbody>();
-                if (networkRb != null)
-                {
-                    isHolding = true;
-                    heldObject = networkRb;
-                    networkRb.SetIsKinematic(true);
-                    networkRb.transform.position = holdPosition.transform.position;
-                    networkRb.transform.rotation = holdPosition.transform.rotation;
-                    networkRb.transform.parent = holdPosition;
-                }
-            }
-            
-        }
-    }
-
-    private void HandleDrop()
-    {
-        Debug.Log("dropping input works");
     }
 }
