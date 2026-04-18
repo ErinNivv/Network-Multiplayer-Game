@@ -27,8 +27,9 @@ public class Player : NetworkBehaviour
     private bool isHolding;
     [SerializeField] private Transform rayPoint;
     [SerializeField] private float grabRange = 2.5f;
-    private NetworkObject heldObject;
+    private GameObject heldObject;
     [SerializeField] private Transform holdPosition;
+    Transform objectHolder;
 
     public override void OnNetworkSpawn()
     {
@@ -45,8 +46,7 @@ public class Player : NetworkBehaviour
 
         if (playerCamera) playerCamera.enabled = true;
 
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
+        //objectHolder = GameObject.FindGameObjectWithTag("WorldObjects").transform;
     }
 
     //public override void OnNetworkDespawn()
@@ -67,9 +67,9 @@ public class Player : NetworkBehaviour
 
     public void OnPickUp(InputAction.CallbackContext context)
     {
-        if(context.performed)
+        if (context.performed)
         {
-           // HandlePickUp();
+            HandlePickUp();
         }
     }
     private void Update()
@@ -80,7 +80,7 @@ public class Player : NetworkBehaviour
 
     private void HandleMovement()
     {
-        if(cc.isGrounded)
+        if (cc.isGrounded)
         {
             verticalVelocity = -0.5f;
         }
@@ -103,5 +103,56 @@ public class Player : NetworkBehaviour
         pitch -= lookInput.y;
         pitch = Mathf.Clamp(pitch, -maxPitch, maxPitch);
         cameraPivot.localEulerAngles = new Vector3(pitch, 0f, 0f);
+    }
+
+    private void HandlePickUp()
+    {
+        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        int layerMask = LayerMask.GetMask("PickUp");
+
+        if (Physics.Raycast(ray, out RaycastHit hit, grabRange, layerMask))
+        {
+            if (!isHolding)
+            {
+                NetworkObject netObj = hit.transform.GetComponent<NetworkObject>();
+                if (netObj != null)
+                {
+                    ObjectInHandServerRpc(netObj.NetworkObjectId);
+                    isHolding = true;
+                    heldObject = hit.transform.gameObject;
+                }
+            }
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void ObjectInHandServerRpc(ulong networkObjectId)
+    {
+        if(NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject netObj))
+        {
+            netObj.ChangeOwnership(OwnerClientId);
+
+            ObjectInHandClientRpc(networkObjectId, new NetworkObjectReference(gameObject.GetComponent<NetworkObject>()));
+        }
+    }
+
+    [ClientRpc]
+    void ObjectInHandClientRpc(ulong networkObjectId, NetworkObjectReference playerRef)
+    {
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject netObj))
+        {
+            playerRef.TryGet(out NetworkObject playerNetObj);
+
+            netObj.transform.position = holdPosition.position;
+            netObj.transform.rotation = holdPosition.rotation;
+            netObj.transform.SetParent(playerNetObj.transform);
+
+            if (netObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
+            {
+                rb.isKinematic = true;
+            }
+        }
+
+        
     }
 }

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 2660793285919849297}
   - component: {fileID: 4404318441135329849}
   - component: {fileID: 1721726778243610604}
+  - component: {fileID: 3843148302105837013}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -322,6 +323,20 @@ MonoBehaviour:
   rayPoint: {fileID: 2021452824638851706}
   grabRange: 2.5
   holdPosition: {fileID: 2021452824638851706}
+--- !u!114 &3843148302105837013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 926476416301692289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b2b18d600a422d4888194a54946cce5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Spawn
+  ShowTopMostFoldoutHeaderGroup: 1
+  spawnObject: {fileID: 6821316219458506710, guid: 18b208fe9e5d5d74589bc3b6359e3ccc, type: 3}
 --- !u!1 &1492449559701992769
 GameObject:
   m_ObjectHideFlags: 0
