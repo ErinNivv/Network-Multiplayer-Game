@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -67,9 +68,13 @@ public class Player : NetworkBehaviour
 
     public void OnPickUp(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (!isHolding && context.performed)
         {
             HandlePickUp();
+        }
+        else if (isHolding && context.performed)
+        {
+            HandleDrop();
         }
     }
     private void Update()
@@ -152,7 +157,37 @@ public class Player : NetworkBehaviour
                 rb.isKinematic = true;
             }
         }
+    }
 
-        
+    private void HandleDrop()
+    {
+        if (!isHolding)
+            return;
+
+        DropObjectServerRpc(heldObject.GetComponent<NetworkObject>().NetworkObjectId);
+        isHolding = false;
+        heldObject = null;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    void DropObjectServerRpc(ulong networkObjectId)
+    {
+        if(NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject netObj))
+        {
+            netObj.ChangeOwnership(0);
+            DropObjectClientRpc(networkObjectId);
+        }
+    }
+
+    [ClientRpc]
+    void DropObjectClientRpc(ulong networkObjectId)
+    {
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject netObj))
+        {
+            netObj.TryRemoveParent();
+
+            if (netObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                rb.isKinematic = false;
+        }
     }
 }
