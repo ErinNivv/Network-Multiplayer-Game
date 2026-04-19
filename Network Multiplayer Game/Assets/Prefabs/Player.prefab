@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2660793285919849297}
   - component: {fileID: 4404318441135329849}
   - component: {fileID: 1721726778243610604}
-  - component: {fileID: 7462341059160846584}
+  - component: {fileID: 2032407613997714743}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -276,7 +276,7 @@ MonoBehaviour:
   rayPoint: {fileID: 2021452824638851706}
   grabRange: 2.5
   holdPosition: {fileID: 2021452824638851706}
---- !u!114 &7462341059160846584
+--- !u!114 &2032407613997714743
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -285,9 +285,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 926476416301692289}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: da52bf8bbc1de48cfb221a6ff30f7972, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.Components.NetworkTransform
+  m_EditorClassIdentifier: Unity.Multiplayer.Center.NetcodeForGameObjectsExample::Unity.Multiplayer.Center.NetcodeForGameObjectsExample.ClientNetworkTransform
   ShowTopMostFoldoutHeaderGroup: 1
   NetworkTransformExpanded: 0
   AutoOwnerAuthorityTickOffset: 1
