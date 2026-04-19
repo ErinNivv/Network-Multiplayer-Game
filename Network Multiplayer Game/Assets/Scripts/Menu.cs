@@ -1,8 +1,9 @@
-using UnityEngine;
+using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
+
 
 public class Menu : MonoBehaviour
 {
@@ -17,8 +18,11 @@ public class Menu : MonoBehaviour
     [SerializeField] private UnityTransport transport;
     [SerializeField] private NetworkManager networkManager;
 
-    private void Awake()
+    private void Start()
     {
+        networkManager = NetworkManager.Singleton;
+        transport = networkManager.GetComponent<UnityTransport>();
+
         if (ipInput) ipInput.text = defaultIP;
         if (portInput) portInput.text = defaultPort.ToString();
 
@@ -26,6 +30,9 @@ public class Menu : MonoBehaviour
 
     public void StartHost()
     {
+        if(networkManager == null) networkManager = NetworkManager.Singleton;
+        if (transport == null) transport = networkManager.GetComponent<UnityTransport>();
+
         ushort port = GetPort();
         transport.SetConnectionData("0.0.0.0", port);
 
@@ -34,20 +41,34 @@ public class Menu : MonoBehaviour
         networkManager.SceneManager.LoadScene("EscapeRoom", LoadSceneMode.Single);
     }
 
+    public void JoinGame()
+    {
+        if (networkManager == null) networkManager = NetworkManager.Singleton;
+        if (transport == null) transport = networkManager.GetComponent<UnityTransport>();
+
+        string ip = GetIP();
+        ushort port = GetPort();
+        transport.SetConnectionData(ip, port);
+
+        networkManager.OnClientConnectedCallback += OnClientConnected;
+        networkManager.StartClient();
+    }
+
+    private void OnClientConnected(ulong clientId)
+    {
+        networkManager.OnClientConnectedCallback -= OnClientConnected;
+
+        Debug.Log($"[Menu] Client {clientId} connected successfully");
+    }
+
     public void StartServerOnly()
     {
+        if (networkManager == null) networkManager = NetworkManager.Singleton;
+        if (transport == null) transport = networkManager.GetComponent<UnityTransport>();
+
         ushort port = GetPort();
         transport.SetConnectionData("0.0.0.0", port);
         networkManager.StartServer();
-    }
-
-    public void JoinGame()
-    {
-        string ip = GetIP();
-        ushort port = GetPort();
-
-        transport.SetConnectionData(ip, port);
-        networkManager.StartClient();
     }
 
     private string GetIP()

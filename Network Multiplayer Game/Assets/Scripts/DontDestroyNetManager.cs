@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class DontDestroyNetManager : MonoBehaviour
 {
-    private void Awake()
+    void Awake()
     {
-     DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);
     }
 }

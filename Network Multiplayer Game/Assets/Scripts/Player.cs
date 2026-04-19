@@ -3,7 +3,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(CharacterController))]
 public class Player : NetworkBehaviour
 {
     [Header("Player Components")]
@@ -36,17 +35,27 @@ public class Player : NetworkBehaviour
     {
         cc = GetComponent<CharacterController>();
         pi = GetComponent<PlayerInput>();
-        if (playerCamera) playerCamera.enabled = false;
+
+        Debug.Log($"[Player] OwnerClientId: {OwnerClientId} | LocalClientId: {NetworkManager.Singleton.LocalClientId} | IsOwner: {IsOwner} | IsServer: {IsServer}");
+        Debug.Log($"[Player] CC: {cc} | CC enabled: {cc?.enabled} | PI: {pi} | PI enabled: {pi?.enabled}");
+        Debug.Log($"[Player] Camera: {playerCamera} | CameraPivot: {cameraPivot} | HoldPosition: {holdPosition} | RayPoint: {rayPoint}");
 
         if (!IsOwner)
         {
+            Debug.Log("[Player] Not owner, destroying CC and disabling PI");
             if (pi) pi.enabled = false;
+            Destroy(cc);
+            playerCamera.enabled = false;
+            AudioListener al = GetComponentInChildren<AudioListener>();
+            if (al) al.enabled = false;
             enabled = false;
             return;
         }
 
-        if (playerCamera) playerCamera.enabled = true;
+        cc.enabled = true;
+        playerCamera.enabled = true;
 
+        Debug.Log($"[Player] Owner setup complete | Camera enabled: {playerCamera.enabled} | CC enabled: {cc.enabled}");
         //objectHolder = GameObject.FindGameObjectWithTag("WorldObjects").transform;
     }
 
@@ -81,6 +90,7 @@ public class Player : NetworkBehaviour
     {
         HandleMovement();
         HandleLook();
+        Debug.Log($"[Player] Update running | moveInput: {moveInput} | lookInput: {lookInput} | isGrounded: {cc.isGrounded}");
     }
 
     private void HandleMovement()
@@ -150,7 +160,7 @@ public class Player : NetworkBehaviour
 
             netObj.transform.position = holdPosition.position;
             netObj.transform.rotation = holdPosition.rotation;
-            netObj.transform.SetParent(playerNetObj.transform);
+            netObj.TrySetParent(playerNetObj.transform, true);
 
             if (netObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
             {
