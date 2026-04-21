@@ -36,13 +36,13 @@ public class Player : NetworkBehaviour
         cc = GetComponent<CharacterController>();
         pi = GetComponent<PlayerInput>();
 
-        Debug.Log($"[Player] OwnerClientId: {OwnerClientId} | LocalClientId: {NetworkManager.Singleton.LocalClientId} | IsOwner: {IsOwner} | IsServer: {IsServer}");
-        Debug.Log($"[Player] CC: {cc} | CC enabled: {cc?.enabled} | PI: {pi} | PI enabled: {pi?.enabled}");
-        Debug.Log($"[Player] Camera: {playerCamera} | CameraPivot: {cameraPivot} | HoldPosition: {holdPosition} | RayPoint: {rayPoint}");
+        //Debug.Log($"[Player] OwnerClientId: {OwnerClientId} | LocalClientId: {NetworkManager.Singleton.LocalClientId} | IsOwner: {IsOwner} | IsServer: {IsServer}");
+        //Debug.Log($"[Player] CC: {cc} | CC enabled: {cc?.enabled} | PI: {pi} | PI enabled: {pi?.enabled}");
+        //Debug.Log($"[Player] Camera: {playerCamera} | CameraPivot: {cameraPivot} | HoldPosition: {holdPosition} | RayPoint: {rayPoint}");
 
         if (!IsOwner)
         {
-            Debug.Log("[Player] Not owner, destroying CC and disabling PI");
+            //Debug.Log("[Player] Not owner, destroying CC and disabling PI");
             if (pi) pi.enabled = false;
             Destroy(cc);
             playerCamera.enabled = false;
@@ -55,7 +55,7 @@ public class Player : NetworkBehaviour
         cc.enabled = true;
         playerCamera.enabled = true;
 
-        Debug.Log($"[Player] Owner setup complete | Camera enabled: {playerCamera.enabled} | CC enabled: {cc.enabled}");
+        //Debug.Log($"[Player] Owner setup complete | Camera enabled: {playerCamera.enabled} | CC enabled: {cc.enabled}");
         //objectHolder = GameObject.FindGameObjectWithTag("WorldObjects").transform;
     }
 
@@ -86,11 +86,24 @@ public class Player : NetworkBehaviour
             HandleDrop();
         }
     }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        if (isHolding && context.performed)
+        {
+            return;
+        }
+        else if (!isHolding && context.performed)
+        {
+            HandleInteract();
+        }
+    }
+
     private void Update()
     {
         HandleMovement();
         HandleLook();
-        Debug.Log($"[Player] Update running | moveInput: {moveInput} | lookInput: {lookInput} | isGrounded: {cc.isGrounded}");
+        //Debug.Log($"[Player] Update running | moveInput: {moveInput} | lookInput: {lookInput} | isGrounded: {cc.isGrounded}");
     }
 
     private void HandleMovement()
@@ -198,6 +211,18 @@ public class Player : NetworkBehaviour
 
             if (netObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
                 rb.isKinematic = false;
+        }
+    }
+
+    private void HandleInteract()
+    {
+        Debug.Log("Interact is working");
+        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+
+        int layerMask = LayerMask.GetMask("RotateButton");
+        if (Physics.Raycast(ray, out RaycastHit hit, grabRange, layerMask))
+        {
+
         }
     }
 }
