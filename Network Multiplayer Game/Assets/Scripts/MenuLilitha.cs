@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-public class MenuLilita : MonoBehaviour
+public class MenuLilitha : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private TMP_InputField ipInput;
