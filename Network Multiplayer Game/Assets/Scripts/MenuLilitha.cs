@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-public class Menu : MonoBehaviour
+public class MenuLilita : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private TMP_InputField ipInput;
@@ -38,7 +38,7 @@ public class Menu : MonoBehaviour
 
         networkManager.StartHost();
 
-        networkManager.SceneManager.LoadScene("EscapeRoom", LoadSceneMode.Single);
+        networkManager.SceneManager.LoadScene("EscapeRoomLilitha", LoadSceneMode.Single);
     }
 
     public void JoinGame()

@@ -9,11 +9,17 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/Menu.unity
+    path: Assets/Scenes/MenuErin.unity
     guid: e54d35a5a9a2785489767af10f42d08f
   - enabled: 1
-    path: Assets/Scenes/EscapeRoom.unity
+    path: Assets/Scenes/EscapeRoomErin.unity
     guid: c9990b449e526cc42b1725d2a7d9eb53
+  - enabled: 1
+    path: Assets/Scenes/MenuLilitha.unity
+    guid: 3a2f8a1fe39d4c64097b6865633132b6
+  - enabled: 1
+    path: Assets/Scenes/EscapeRoomLilitha.unity
+    guid: 020f327a181baf74bb6f816a8529af8e
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
