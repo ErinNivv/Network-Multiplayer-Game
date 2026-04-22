@@ -6,6 +6,7 @@ TagManager:
   tags:
   - WorldObjects
   - Statue
+  - Safe
   layers:
   - Default
   - TransparentFX

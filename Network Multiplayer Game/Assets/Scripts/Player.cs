@@ -96,6 +96,8 @@ public class Player : NetworkBehaviour
         else if (!isHolding && context.performed)
         {
             HandleInteract();
+            HandleKeypad();
+            Debug.Log("Oninteract is working");
         }
     }
 
@@ -103,6 +105,7 @@ public class Player : NetworkBehaviour
     {
         HandleMovement();
         HandleLook();
+        HandleKeypad();
         //Debug.Log($"[Player] Update running | moveInput: {moveInput} | lookInput: {lookInput} | isGrounded: {cc.isGrounded}");
     }
 
@@ -223,6 +226,28 @@ public class Player : NetworkBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, grabRange, layerMask))
         {
             
+        }
+    }
+
+    private void HandleKeypad()
+    {
+        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+
+        Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
+        Debug.DrawRay(transform.position, forward, Color.green);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 2f))
+        {
+            if (hit.collider.CompareTag("Safe"))
+            {
+                Debug.Log("safe ray is working");
+                Keypad keypad = hit.collider.GetComponent<Keypad>();
+                if (keypad != null)
+                {
+                    keypad.Open();
+                }
+            }
+           
         }
     }
 }

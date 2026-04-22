@@ -38,8 +38,14 @@ public class Keypad : MonoBehaviour
         Ans.text = "";                       
     }
 
+    public void Open()
+    {
+        keyPad.SetActive(true);
+    }
     public void Close()
     {
         keyPad.SetActive(false);
     }
+
+    
 }
