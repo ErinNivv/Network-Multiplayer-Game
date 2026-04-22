@@ -222,7 +222,7 @@ public class Player : NetworkBehaviour
         int layerMask = LayerMask.GetMask("RotateButton");
         if (Physics.Raycast(ray, out RaycastHit hit, grabRange, layerMask))
         {
-
+            
         }
     }
 }
