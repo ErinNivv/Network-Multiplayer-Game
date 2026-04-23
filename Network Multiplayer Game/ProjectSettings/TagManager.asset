@@ -9,6 +9,8 @@ TagManager:
   - Safe
   - LightSwitch
   - Battery
+  - 'BlacklightOnly '
+  - TorchLight
   layers:
   - Default
   - TransparentFX
@@ -17,7 +19,7 @@ TagManager:
   - Water
   - UI
   - Battery
-  - 
+  - BlacklightOnly
   - 
   - 
   - 

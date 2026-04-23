@@ -45,7 +45,7 @@ public class Torch : NetworkBehaviour
     private void InsertBatteryClientRpc()
     {
         hasBattery = true;
-        torchLightObject.SetActive(true); // turn on light
+        torchLightObject.SetActive(true); 
         Debug.Log("Battery inserted! Torch is on.");
 
     }
@@ -53,6 +53,6 @@ public class Torch : NetworkBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius); // visualize detection radius
+        Gizmos.DrawWireSphere(transform.position, detectionRadius); 
     }
 }
