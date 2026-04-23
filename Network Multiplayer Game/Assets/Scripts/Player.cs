@@ -29,6 +29,7 @@ public class Player : NetworkBehaviour
     [SerializeField] private float grabRange = 3f;
     private GameObject heldObject;
     [SerializeField] private Transform holdPosition;
+    [SerializeField] private Transform torchHoldPosition;
     Transform objectHolder;
 
     public override void OnNetworkSpawn()
@@ -36,9 +37,9 @@ public class Player : NetworkBehaviour
         cc = GetComponent<CharacterController>();
         pi = GetComponent<PlayerInput>();
 
-        //Debug.Log($"[Player] OwnerClientId: {OwnerClientId} | LocalClientId: {NetworkManager.Singleton.LocalClientId} | IsOwner: {IsOwner} | IsServer: {IsServer}");
-        //Debug.Log($"[Player] CC: {cc} | CC enabled: {cc?.enabled} | PI: {pi} | PI enabled: {pi?.enabled}");
-        //Debug.Log($"[Player] Camera: {playerCamera} | CameraPivot: {cameraPivot} | HoldPosition: {holdPosition} | RayPoint: {rayPoint}");
+        Debug.Log($"[Player] OwnerClientId: {OwnerClientId} | LocalClientId: {NetworkManager.Singleton.LocalClientId} | IsOwner: {IsOwner} | IsServer: {IsServer}");
+        Debug.Log($"[Player] CC: {cc} | CC enabled: {cc?.enabled} | PI: {pi} | PI enabled: {pi?.enabled}");
+        Debug.Log($"[Player] Camera: {playerCamera} | CameraPivot: {cameraPivot} | HoldPosition: {holdPosition} | RayPoint: {rayPoint}");
 
         if (!IsOwner)
         {
@@ -55,7 +56,7 @@ public class Player : NetworkBehaviour
         cc.enabled = true;
         playerCamera.enabled = true;
 
-        //Debug.Log($"[Player] Owner setup complete | Camera enabled: {playerCamera.enabled} | CC enabled: {cc.enabled}");
+        Debug.Log($"[Player] Owner setup complete | Camera enabled: {playerCamera.enabled} | CC enabled: {cc.enabled}");
         //objectHolder = GameObject.FindGameObjectWithTag("WorldObjects").transform;
     }
 
@@ -104,8 +105,8 @@ public class Player : NetworkBehaviour
     {
         HandleMovement();
         HandleLook();
-        
-        //Debug.Log($"[Player] Update running | moveInput: {moveInput} | lookInput: {lookInput} | isGrounded: {cc.isGrounded}");
+
+        Debug.Log($"[Player] Update running | moveInput: {moveInput} | lookInput: {lookInput} | isGrounded: {cc.isGrounded}");
     }
 
     private void HandleMovement()
@@ -175,8 +176,12 @@ public class Player : NetworkBehaviour
         {
             playerRef.TryGet(out NetworkObject playerNetObj);
 
-            netObj.transform.position = holdPosition.position;
-            netObj.transform.rotation = holdPosition.rotation;
+            // check if its a torch
+            bool isTorch = netObj.GetComponent<Torch>() != null;
+            Transform targetHoldPosition = isTorch ? torchHoldPosition : holdPosition;
+
+            netObj.transform.position = targetHoldPosition.position;
+            netObj.transform.rotation = targetHoldPosition.rotation;
             netObj.TrySetParent(playerNetObj.transform, true);
 
             if (netObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
