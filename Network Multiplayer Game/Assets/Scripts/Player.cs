@@ -26,7 +26,7 @@ public class Player : NetworkBehaviour
     [Header("PickUp")]
     private bool isHolding;
     [SerializeField] private Transform rayPoint;
-    [SerializeField] private float grabRange = 2.5f;
+    [SerializeField] private float grabRange = 3f;
     private GameObject heldObject;
     [SerializeField] private Transform holdPosition;
     Transform objectHolder;
@@ -150,6 +150,8 @@ public class Player : NetworkBehaviour
                     ObjectInHandServerRpc(netObj.NetworkObjectId);
                     isHolding = true;
                     heldObject = hit.transform.gameObject;
+
+                    Debug.Log("Pick Up working");
                 }
             }
         }
