@@ -95,8 +95,7 @@ public class Player : NetworkBehaviour
         }
         else if (!isHolding && context.performed)
         {
-            HandleInteract();
-            HandleKeypad();
+            HandleAllInteractions();
             Debug.Log("Oninteract is working");
         }
     }
@@ -105,7 +104,7 @@ public class Player : NetworkBehaviour
     {
         HandleMovement();
         HandleLook();
-        HandleKeypad();
+        
         //Debug.Log($"[Player] Update running | moveInput: {moveInput} | lookInput: {lookInput} | isGrounded: {cc.isGrounded}");
     }
 
@@ -217,37 +216,29 @@ public class Player : NetworkBehaviour
         }
     }
 
-    private void HandleInteract()
-    {
-        Debug.Log("Interact is working");
-        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-
-        int layerMask = LayerMask.GetMask("RotateButton");
-        if (Physics.Raycast(ray, out RaycastHit hit, grabRange, layerMask))
-        {
-            
-        }
-    }
-
-    private void HandleKeypad()
+    private void HandleAllInteractions()
     {
         Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
 
-        Vector3 forward = transform.TransformDirection(Vector3.forward) * 10;
-        Debug.DrawRay(transform.position, forward, Color.green);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, 2f))
+        if (Physics.Raycast(ray, out RaycastHit hit, 3f))
         {
+            Debug.Log("Hit: " + hit.collider.name + " | Tag: " + hit.collider.tag);
+
             if (hit.collider.CompareTag("Safe"))
             {
-                Debug.Log("safe ray is working");
                 Keypad keypad = hit.collider.GetComponent<Keypad>();
-                if (keypad != null)
-                {
-                    keypad.Open();
-                }
+                if (keypad != null) keypad.Open();
             }
-           
+            else if (hit.collider.CompareTag("LightSwitch"))
+            {
+                LightSwitch lightSwitch = hit.collider.GetComponent<LightSwitch>();
+                if (lightSwitch != null) lightSwitch.Toggle();
+            }
+            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("RotateButton"))
+            {
+                //rotate button logic here
+            }
         }
     }
+
 }

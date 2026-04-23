@@ -7,6 +7,8 @@ TagManager:
   - WorldObjects
   - Statue
   - Safe
+  - LightSwitch
+  - Battery
   layers:
   - Default
   - TransparentFX
@@ -14,7 +16,7 @@ TagManager:
   - PickUp
   - Water
   - UI
-  - 
+  - Battery
   - 
   - 
   - 
