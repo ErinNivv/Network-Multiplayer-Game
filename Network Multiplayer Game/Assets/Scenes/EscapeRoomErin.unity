@@ -325,7 +325,7 @@ Transform:
   m_GameObject: {fileID: 58633856}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.499, z: 0}
+  m_LocalPosition: {x: 0, y: 0.499, z: -0.013}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -15850,6 +15850,34 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 270063762
       objectReference: {fileID: 0}
+    - target: {fileID: 1455908584096540675, guid: 68f6790eae08dc14289c056eaa4ead68, type: 3}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843950918274431482, guid: 68f6790eae08dc14289c056eaa4ead68, type: 3}
+      propertyPath: m_Size.x
+      value: 2.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843950918274431482, guid: 68f6790eae08dc14289c056eaa4ead68, type: 3}
+      propertyPath: m_Size.y
+      value: 4.181959
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843950918274431482, guid: 68f6790eae08dc14289c056eaa4ead68, type: 3}
+      propertyPath: m_Size.z
+      value: 1.7433133
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843950918274431482, guid: 68f6790eae08dc14289c056eaa4ead68, type: 3}
+      propertyPath: m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843950918274431482, guid: 68f6790eae08dc14289c056eaa4ead68, type: 3}
+      propertyPath: m_Center.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3843950918274431482, guid: 68f6790eae08dc14289c056eaa4ead68, type: 3}
+      propertyPath: m_Center.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7576397619214276536, guid: 68f6790eae08dc14289c056eaa4ead68, type: 3}
       propertyPath: m_Name
       value: Statue1 (2)
@@ -15857,6 +15885,26 @@ PrefabInstance:
     - target: {fileID: 7576397619214276536, guid: 68f6790eae08dc14289c056eaa4ead68, type: 3}
       propertyPath: m_TagString
       value: Statue
+      objectReference: {fileID: 0}
+    - target: {fileID: 8197855522571415174, guid: 68f6790eae08dc14289c056eaa4ead68, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3636323082
+      objectReference: {fileID: 0}
+    - target: {fileID: 8197855522571415174, guid: 68f6790eae08dc14289c056eaa4ead68, type: 3}
+      propertyPath: SceneMigrationSynchronization
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8340919457603408358, guid: 68f6790eae08dc14289c056eaa4ead68, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 8340919457603408358, guid: 68f6790eae08dc14289c056eaa4ead68, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 8340919457603408358, guid: 68f6790eae08dc14289c056eaa4ead68, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.18
       objectReference: {fileID: 0}
     - target: {fileID: 8340919457603408358, guid: 68f6790eae08dc14289c056eaa4ead68, type: 3}
       propertyPath: m_LocalPosition.x
