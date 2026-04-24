@@ -9,50 +9,52 @@ public class Torch : NetworkBehaviour
     [SerializeField] private float detectionRadius = 1.5f;
    
     private bool hasBattery = false;
+    private Rigidbody rb;
 
-    private void Update()
+    public override void OnNetworkSpawn()
+    {
+        rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true;
+    }
+
+    private void OnTriggerEnter(Collider other)
     {
         if (hasBattery) return;
 
-        
-        Collider[] hits = Physics.OverlapSphere(transform.position, detectionRadius);
-        foreach (Collider hit in hits)
+        if (other.CompareTag("Battery"))
         {
-            if (hit.CompareTag("Battery"))
+            NetworkObject netObj = other.GetComponent<NetworkObject>();
+            if (netObj != null)
             {
-                NetworkObject netObj = hit.GetComponent<NetworkObject>();
-                if (netObj != null)
-                {
-                    InsertBatteryServerRpc(netObj.NetworkObjectId);
-                }
-                break;
+                InsertBatteryServerRpc(netObj.NetworkObjectId);
             }
         }
     }
-
     [ServerRpc(RequireOwnership = false)]
     private void InsertBatteryServerRpc(ulong batteryNetworkId)
     {
         if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(batteryNetworkId, out NetworkObject netObj))
         {
-            netObj.Despawn(false); 
-            InsertBatteryClientRpc();
-            battery.SetActive(false);
+            HideBatteryClientRpc(batteryNetworkId);
         }
     }
 
     [ClientRpc]
-    private void InsertBatteryClientRpc()
+    private void HideBatteryClientRpc(ulong batteryNetworkId)
     {
-        hasBattery = true;
-        torchLightObject.SetActive(true); // turn on light
-        Debug.Log("Battery inserted! Torch is on.");
-
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(batteryNetworkId, out NetworkObject netObj))
+        {
+            netObj.gameObject.SetActive(false);
+            hasBattery = true;
+            Debug.Log("torchLightObject is: " + torchLightObject);
+            torchLightObject.SetActive(true);
+            Debug.Log("Battery inserted! Torch is on.");
+        }
     }
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius); // visualize detection radius
+        Gizmos.DrawWireSphere(transform.position, detectionRadius); 
     }
 }

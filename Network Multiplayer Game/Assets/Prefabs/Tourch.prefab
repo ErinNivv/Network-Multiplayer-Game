@@ -252,6 +252,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 73032c179cd51714fb4f604129ec8dee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4588772366697093820}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 73032c179cd51714fb4f604129ec8dee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -4488352582892973731}
   m_SourcePrefab: {fileID: 100100000, guid: 73032c179cd51714fb4f604129ec8dee, type: 3}
 --- !u!1 &8328960181699211433 stripped
 GameObject:
@@ -296,9 +299,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Torch
   ShowTopMostFoldoutHeaderGroup: 1
-  torchLight: {fileID: 0}
-  torchLightObject: {fileID: 0}
-  battery: {fileID: 0}
+  torchLight: {fileID: 1245224676824627123}
+  torchLightObject: {fileID: 6276707183413206890}
+  battery: {fileID: 9144413306765257885, guid: e1cd4ffacd89ae24190a8170fce088a2, type: 3}
   detectionRadius: 1.5
 --- !u!114 &8231404986958412666
 MonoBehaviour:
@@ -409,8 +412,29 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.0722246, y: 13.165079, z: 3.6940544}
-  m_Center: {x: -0.13552134, y: 6.0821414, z: 0.0381636}
+  m_Size: {x: 2.6946654, y: 13.250824, z: 3.3325965}
+  m_Center: {x: -0.44674796, y: 6.124964, z: -0.14255516}
+--- !u!65 &-4488352582892973731
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8328960181699211433}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 13.65775, z: 5.103439}
+  m_Center: {x: -0.000008628218, y: 6.328812, z: -0.3059034}
 --- !u!4 &8709321233276971539 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 73032c179cd51714fb4f604129ec8dee, type: 3}
