@@ -26,7 +26,7 @@ public class Player : NetworkBehaviour
     [Header("PickUp")]
     private bool isHolding;
     [SerializeField] private Transform rayPoint;
-    [SerializeField] private float grabRange = 3f;
+    [SerializeField] private float grabRange = 3.5f;
     private GameObject heldObject;
     [SerializeField] private Transform holdPosition;
     [SerializeField] private Transform torchHoldPosition;
