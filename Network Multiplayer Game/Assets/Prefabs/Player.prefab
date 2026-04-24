@@ -65,7 +65,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 3, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 405992077849199940}
@@ -317,7 +317,7 @@ MonoBehaviour:
   gravity: -9.8
   verticalVelocity: 0
   rayPoint: {fileID: 2021452824638851706}
-  grabRange: 2.5
+  grabRange: 3
   holdPosition: {fileID: 2021452824638851706}
   torchHoldPosition: {fileID: 7063677954852446314}
 --- !u!114 &2032407613997714743

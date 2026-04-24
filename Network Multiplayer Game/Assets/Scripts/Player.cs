@@ -1,4 +1,5 @@
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -26,11 +27,14 @@ public class Player : NetworkBehaviour
     [Header("PickUp")]
     private bool isHolding;
     [SerializeField] private Transform rayPoint;
-    [SerializeField] private float grabRange = 3f;
+    [SerializeField] private float grabRange = 3.5f;
     private GameObject heldObject;
     [SerializeField] private Transform holdPosition;
     [SerializeField] private Transform torchHoldPosition;
+    [SerializeField] private float followSpeed = 30f;
+    [SerializeField] private float maxHoldDistance = 0.5f;
     Transform objectHolder;
+    private Transform activeHoldPosition;
 
     public override void OnNetworkSpawn()
     {
@@ -108,6 +112,33 @@ public class Player : NetworkBehaviour
 
         Debug.Log($"[Player] Update running | moveInput: {moveInput} | lookInput: {lookInput} | isGrounded: {cc.isGrounded}");
     }
+    private void FixedUpdate()
+    {
+        if (!IsOwner) return;
+
+        if (!isHolding || heldObject == null || activeHoldPosition == null) return;
+        {
+            Rigidbody rb = heldObject.GetComponent<Rigidbody>();
+            if (rb == null || rb.isKinematic) return;
+
+            Vector3 targetPos = activeHoldPosition.position;
+            float distance = Vector3.Distance(rb.position, targetPos);
+
+            if (distance > maxHoldDistance)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.position = targetPos;
+            }
+            else
+            {
+                Vector3 direction = targetPos - rb.position;
+                rb.linearVelocity = direction * followSpeed;
+            }
+
+            rb.MoveRotation(activeHoldPosition.rotation);
+            rb.angularVelocity = Vector3.zero;
+        }
+    }
 
     private void HandleMovement()
     {
@@ -178,15 +209,22 @@ public class Player : NetworkBehaviour
 
             // check if its a torch
             bool isTorch = netObj.GetComponent<Torch>() != null;
+            activeHoldPosition = isTorch ? torchHoldPosition : holdPosition;
             Transform targetHoldPosition = isTorch ? torchHoldPosition : holdPosition;
 
             netObj.transform.position = targetHoldPosition.position;
             netObj.transform.rotation = targetHoldPosition.rotation;
             netObj.TrySetParent(playerNetObj.transform, true);
 
+            NetworkTransform nt = netObj.GetComponent<NetworkTransform>();
+            if (nt != null) nt.enabled = false;
+
             if (netObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
             {
-                rb.isKinematic = true;
+                rb.isKinematic = false;
+                rb.useGravity = false;
+                rb.angularVelocity = Vector3.zero;
+                rb.linearVelocity = Vector3.zero;
             }
         }
     }
@@ -217,8 +255,13 @@ public class Player : NetworkBehaviour
         if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject netObj))
         {
             netObj.TryRemoveParent();
+            activeHoldPosition = null;
+
+            NetworkTransform nt = netObj.GetComponent<NetworkTransform>();
+            if (nt != null) nt.enabled = true;
 
             if (netObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
+                rb.useGravity = true;
                 rb.isKinematic = false;
         }
     }
