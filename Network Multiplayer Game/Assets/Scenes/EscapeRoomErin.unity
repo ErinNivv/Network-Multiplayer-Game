@@ -308,6 +308,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 58025711}
+  - component: {fileID: 58025712}
   m_Layer: 0
   m_Name: SlidingDoor
   m_TagString: Untagged
@@ -333,6 +334,31 @@ Transform:
   - {fileID: 1278967481}
   m_Father: {fileID: 365235982}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &58025712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 58025710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 2402748728
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &58633856
 GameObject:
   m_ObjectHideFlags: 0
@@ -1864,11 +1890,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 350195631}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43dfea2fff2503943bb45250ab748ee6, type: 3}
+  m_Script: {fileID: 11500000, guid: 77564d21227b70b4b85306b06d2e021a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KeyUnlock
+  m_EditorClassIdentifier: Assembly-CSharp::KeyDiamond
   ShowTopMostFoldoutHeaderGroup: 1
-  cabinetDoor_Triangle: {fileID: 774495159}
+  cabinetDoor_Diamond: {fileID: 1714577812}
 --- !u!1 &365235981
 GameObject:
   m_ObjectHideFlags: 0
@@ -2635,11 +2661,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 478577473}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43dfea2fff2503943bb45250ab748ee6, type: 3}
+  m_Script: {fileID: 11500000, guid: e416209de8f038d45bfdc943e5b86349, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KeyUnlock
+  m_EditorClassIdentifier: Assembly-CSharp::KeySquare
   ShowTopMostFoldoutHeaderGroup: 1
-  cabinetDoor_Triangle: {fileID: 774495159}
+  cabinetDoor_Square: {fileID: 1687571246}
 --- !u!1 &483560010
 GameObject:
   m_ObjectHideFlags: 0
@@ -8492,11 +8518,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1278967480}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43dfea2fff2503943bb45250ab748ee6, type: 3}
+  m_Script: {fileID: 11500000, guid: 617c990ef639b6b4dae0b2034d0cf497, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::KeyUnlock
+  m_EditorClassIdentifier: Assembly-CSharp::KeyHeart
   ShowTopMostFoldoutHeaderGroup: 1
-  cabinetDoor_Triangle: {fileID: 774495159}
+  cabinetDoor_Heart: {fileID: 58025712}
 --- !u!1 &1311348389
 GameObject:
   m_ObjectHideFlags: 0
@@ -10808,6 +10834,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1687571245}
+  - component: {fileID: 1687571246}
   m_Layer: 0
   m_Name: SlidingDoor
   m_TagString: Untagged
@@ -10833,6 +10860,31 @@ Transform:
   - {fileID: 341627811}
   m_Father: {fileID: 813251427}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1687571246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687571244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 1108599570
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1001 &1691215599
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11040,6 +11092,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1714577811}
+  - component: {fileID: 1714577812}
   m_Layer: 0
   m_Name: SlidingDoor
   m_TagString: Untagged
@@ -11065,6 +11118,31 @@ Transform:
   - {fileID: 350195632}
   m_Father: {fileID: 823016378}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1714577812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714577810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Netcode.Runtime::Unity.Netcode.NetworkObject
+  GlobalObjectIdHash: 3810208485
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &1730619058
 GameObject:
   m_ObjectHideFlags: 0
