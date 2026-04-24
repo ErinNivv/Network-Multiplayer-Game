@@ -317,7 +317,7 @@ MonoBehaviour:
   gravity: -9.8
   verticalVelocity: 0
   rayPoint: {fileID: 2021452824638851706}
-  grabRange: 2.5
+  grabRange: 3
   holdPosition: {fileID: 2021452824638851706}
   torchHoldPosition: {fileID: 7063677954852446314}
 --- !u!114 &2032407613997714743
