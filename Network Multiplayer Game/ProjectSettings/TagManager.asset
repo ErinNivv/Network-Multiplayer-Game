@@ -11,6 +11,7 @@ TagManager:
   - Battery
   - 'BlacklightOnly '
   - TorchLight
+  - Key
   layers:
   - Default
   - TransparentFX
