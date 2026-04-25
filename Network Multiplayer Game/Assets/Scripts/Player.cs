@@ -286,7 +286,9 @@ public class Player : NetworkBehaviour
             }
             else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("RotateButton"))
             {
-                //rotate button logic here
+                Debug.Log("Rotate button hit");
+                PhysicalRotateButton button = hit.collider.GetComponentInParent<PhysicalRotateButton>();
+                if (button != null) button.Interact();
             }
         }
     }
