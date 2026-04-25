@@ -66,6 +66,11 @@ public class StatueSnap : NetworkBehaviour
 
         currentRotationIndex.Value = nextIndex;
         isCorrect.Value = (nextIndex == correctRotationIndex);
+
+        if( isCorrect.Value )
+        {
+            Debug.Log("Is correctly placed");
+        }
     }
     public void OnRotationIndexChanged(int previous, int current)
     {
