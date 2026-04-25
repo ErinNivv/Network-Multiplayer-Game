@@ -5,6 +5,8 @@ public class StatueSnap : NetworkBehaviour
 {
     [SerializeField] private Transform pillarTransform;
     [SerializeField] private int correctRotationIndex = 1;
+    [SerializeField] private int correctStatueCount;
+    [SerializeField] private NetworkObject exitDoor;
 
     private readonly Quaternion[] rotationSteps = new Quaternion[]
     {
@@ -67,7 +69,7 @@ public class StatueSnap : NetworkBehaviour
         currentRotationIndex.Value = nextIndex;
         isCorrect.Value = (nextIndex == correctRotationIndex);
 
-        if( isCorrect.Value )
+        if( isCorrect.Value == true)
         {
             Debug.Log("Is correctly placed");
         }
