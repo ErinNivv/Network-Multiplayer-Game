@@ -390,7 +390,27 @@ MonoBehaviour:
   m_Animator: {fileID: 62542365250883014}
   TransitionStateInfoList: []
   AnimatorParameterEntries:
-    ParameterEntries: []
+    ParameterEntries:
+    - name: IsPlayer1
+      NameHash: 1521136249
+      Synchronize: 1
+      ParameterType: 4
+    - name: IsWalking
+      NameHash: 1282839668
+      Synchronize: 1
+      ParameterType: 4
+    - name: IsPlayer2
+      NameHash: -1012669501
+      Synchronize: 1
+      ParameterType: 4
+    - name: IsPlayer3
+      NameHash: -1264266411
+      Synchronize: 1
+      ParameterType: 4
+    - name: IsPlayer4
+      NameHash: 717244150
+      Synchronize: 1
+      ParameterType: 4
   AnimatorParametersExpanded: 0
 --- !u!95 &62542365250883014
 Animator:
