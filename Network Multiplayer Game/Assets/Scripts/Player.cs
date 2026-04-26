@@ -36,6 +36,9 @@ public class Player : NetworkBehaviour
     Transform objectHolder;
     private Transform activeHoldPosition;
 
+    [Header("Animations")]
+    [SerializeField] private Animator animator;
+
     public override void OnNetworkSpawn()
     {
         cc = GetComponent<CharacterController>();
@@ -62,6 +65,23 @@ public class Player : NetworkBehaviour
 
         Debug.Log($"[Player] Owner setup complete | Camera enabled: {playerCamera.enabled} | CC enabled: {cc.enabled}");
         //objectHolder = GameObject.FindGameObjectWithTag("WorldObjects").transform;
+
+        if(pi.playerIndex == 0)
+        {
+            animator.SetBool("IsPlayer1", true);
+        }
+        if (pi.playerIndex == 1)
+        {
+            animator.SetBool("IsPlayer2", true);
+        }
+        if (pi.playerIndex == 2)
+        {
+            animator.SetBool("IsPlayer3", true);
+        }
+        else if (pi.playerIndex == 3)
+        {
+            animator.SetBool("IsPlayer4", true);
+        }
     }
 
     //public override void OnNetworkDespawn()
@@ -73,6 +93,13 @@ public class Player : NetworkBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
+
+        animator.SetBool("IsWalking", true);
+
+        if (context.canceled)
+        {
+            animator.SetBool("IsWalking", false);
+        }
     }
 
     public void OnLook(InputAction.CallbackContext context)
