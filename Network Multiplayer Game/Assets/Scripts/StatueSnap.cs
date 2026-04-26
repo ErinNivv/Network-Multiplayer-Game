@@ -5,8 +5,7 @@ public class StatueSnap : NetworkBehaviour
 {
     [SerializeField] private Transform pillarTransform;
     [SerializeField] private int correctRotationIndex = 1;
-    [SerializeField] private int correctStatueCount;
-    [SerializeField] private NetworkObject exitDoor;
+    [SerializeField] private StatueCount statueCount;
 
     private readonly Quaternion[] rotationSteps = new Quaternion[]
     {
@@ -35,18 +34,44 @@ public class StatueSnap : NetworkBehaviour
         NetworkVariableWritePermission.Server
         );
 
+    public NetworkVariable<ulong> statueNetworkId = new NetworkVariable<ulong>(
+        ulong.MaxValue,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Server);
+
     private NetworkObject statue;
 
     public override void OnNetworkSpawn()
     {
         currentRotationIndex.OnValueChanged += OnRotationIndexChanged;
+        statueNetworkId.OnValueChanged += OnStatueIdChanged;
     }
+
+    public override void OnNetworkDespawn()
+    {
+        currentRotationIndex.OnValueChanged -= OnRotationIndexChanged;
+        statueNetworkId.OnValueChanged -= OnStatueIdChanged;
+    }
+
+    private void OnStatueIdChanged(ulong previous, ulong current)
+    {
+        if(current == ulong.MaxValue)
+        {
+            statue = null;
+            return;
+        }
+
+        if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(current, out var obj))
+            statue = obj;
+    }
+
     public void OnCollisionEnter(Collision other)
     {
         if(!IsServer) return;
-        if (other.gameObject.CompareTag("Statue"))
+        if (!other.gameObject.CompareTag("Statue")) return;
         {
             statue = other.gameObject.GetComponent<NetworkObject>();
+            statueNetworkId.Value = statue.NetworkObjectId;
             
             statue.transform.position = pillarTransform.position;
             statue.transform.rotation = rotationSteps[0];
@@ -63,15 +88,32 @@ public class StatueSnap : NetworkBehaviour
     {
         if (!isPlaced.Value) return;
 
+        bool wasCorrect = isCorrect.Value;
+
         int nextIndex = (currentRotationIndex.Value +1) % rotationSteps.Length;
+        bool nextIsCorrect = (nextIndex == correctRotationIndex);
+
         statue.transform.rotation = rotationSteps[nextIndex];
-
         currentRotationIndex.Value = nextIndex;
-        isCorrect.Value = (nextIndex == correctRotationIndex);
+        isCorrect.Value = nextIsCorrect;
 
-        if( isCorrect.Value == true)
+        if( nextIsCorrect != wasCorrect)
         {
-            Debug.Log("Is correctly placed");
+            if (statueCount != null)
+            {
+                if (nextIsCorrect)
+                {
+                    Debug.Log("Is correctly placed");
+                    statueCount.CorrectStatueCount();
+                    
+                }
+                else
+                {
+                    Debug.Log("Is incorrectly placed");
+                    statueCount.IncorrectStatueCount();
+                    
+                }
+            }
         }
     }
     public void OnRotationIndexChanged(int previous, int current)
