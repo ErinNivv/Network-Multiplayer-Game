@@ -41,6 +41,16 @@ public class MenuErin : MonoBehaviour
         networkManager.SceneManager.LoadScene("EscapeRoomErin", LoadSceneMode.Single);
     }
 
+    //private void OnClientConnectedAsHost(ulong clientId)
+    //{
+    //    if (clientId == NetworkManager.ServerClientId) return;
+    //    {
+    //        networkManager.OnClientConnectedCallback -= OnClientConnectedAsHost;
+    //        Debug.Log($"[Host] Client {clientId} connected — loading scene");
+    //        networkManager.SceneManager.LoadScene("EscapeRoomErin", LoadSceneMode.Single);
+    //    }
+    //}
+
     public void JoinGame()
     {
         if (networkManager == null) networkManager = NetworkManager.Singleton;
