@@ -1,6 +1,5 @@
 using Unity.Netcode;
 using Unity.Netcode.Components;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -36,6 +35,9 @@ public class Player : NetworkBehaviour
     Transform objectHolder;
     private Transform activeHoldPosition;
 
+    [Header("Animations")]
+    [SerializeField] private Animator animator;
+
     public override void OnNetworkSpawn()
     {
         cc = GetComponent<CharacterController>();
@@ -57,11 +59,29 @@ public class Player : NetworkBehaviour
             return;
         }
 
-        cc.enabled = true;
+        cc.enabled = false;
         playerCamera.enabled = true;
+        StartCoroutine(EnableCCAfterDelay());
 
         Debug.Log($"[Player] Owner setup complete | Camera enabled: {playerCamera.enabled} | CC enabled: {cc.enabled}");
         //objectHolder = GameObject.FindGameObjectWithTag("WorldObjects").transform;
+
+        if(pi.playerIndex == 0)
+        {
+            animator.SetBool("IsPlayer1", true);
+        }
+        if (pi.playerIndex == 1)
+        {
+            animator.SetBool("IsPlayer2", true);
+        }
+        if (pi.playerIndex == 2)
+        {
+            animator.SetBool("IsPlayer3", true);
+        }
+        else if (pi.playerIndex == 3)
+        {
+            animator.SetBool("IsPlayer4", true);
+        }
     }
 
     //public override void OnNetworkDespawn()
@@ -73,6 +93,13 @@ public class Player : NetworkBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
+
+        animator.SetBool("IsWalking", true);
+
+        if (context.canceled)
+        {
+            animator.SetBool("IsWalking", false);
+        }
     }
 
     public void OnLook(InputAction.CallbackContext context)
@@ -105,12 +132,17 @@ public class Player : NetworkBehaviour
         }
     }
 
+    private System.Collections.IEnumerator EnableCCAfterDelay()
+    {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        cc.enabled = true;
+    }
+
     private void Update()
     {
         HandleMovement();
         HandleLook();
-
-        Debug.Log($"[Player] Update running | moveInput: {moveInput} | lookInput: {lookInput} | isGrounded: {cc.isGrounded}");
     }
     private void FixedUpdate()
     {
@@ -142,6 +174,7 @@ public class Player : NetworkBehaviour
 
     private void HandleMovement()
     {
+        if (!cc.enabled) return;
         if (cc.isGrounded)
         {
             verticalVelocity = -0.5f;
@@ -261,8 +294,11 @@ public class Player : NetworkBehaviour
             if (nt != null) nt.enabled = true;
 
             if (netObj.TryGetComponent<Rigidbody>(out Rigidbody rb))
+            {
                 rb.useGravity = true;
                 rb.isKinematic = false;
+            }
+                
         }
     }
 
@@ -286,7 +322,9 @@ public class Player : NetworkBehaviour
             }
             else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("RotateButton"))
             {
-                //rotate button logic here
+                Debug.Log("Rotate button hit");
+                PhysicalRotateButton button = hit.collider.GetComponentInParent<PhysicalRotateButton>();
+                if (button != null) button.Interact();
             }
         }
     }

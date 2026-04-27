@@ -3,24 +3,24 @@ using Unity.Netcode;
 
 public class KeyUnlock : NetworkBehaviour
 {
-    [SerializeField] private NetworkObject cabinetDoor;
-    private bool hasUnlocked = false;
+    [SerializeField] private NetworkObject cabinetDoor_Triangle;
+    private NetworkVariable<bool> hasUnlocked = new NetworkVariable<bool>(false);
 
     private void OnCollisionEnter(Collision other)
     {
         if(!IsServer) return;
-        if (hasUnlocked) return;
-
-        if (other.gameObject.CompareTag("Key"))
+        if (hasUnlocked.Value) return;
+        if (cabinetDoor_Triangle == null)
         {
-            hasUnlocked = true;
+            return;
+        }
 
-            //NetworkObject keyObject = other.gameObject.GetComponent<NetworkObject>();
-            //if (keyObject != null)
-            //    keyObject.Despawn(true);
+        if (other.gameObject.CompareTag("TriangleKey"))
+        { 
+            Debug.Log("has collided");
 
-            if(cabinetDoor != null)
-                cabinetDoor.Despawn(false);
+            hasUnlocked.Value = true;
+            cabinetDoor_Triangle.Despawn(true);
         }
     }
 
