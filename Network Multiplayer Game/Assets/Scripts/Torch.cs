@@ -7,6 +7,8 @@ public class Torch : NetworkBehaviour
     [SerializeField] private GameObject torchLightObject;
     [SerializeField] private GameObject battery;
     [SerializeField] private float detectionRadius = 1.5f;
+    [SerializeField] private NetworkObject no48;
+    [SerializeField] private NetworkObject no63;
    
     private bool hasBattery = false;
     private Rigidbody rb;
@@ -49,6 +51,8 @@ public class Torch : NetworkBehaviour
             Debug.Log("torchLightObject is: " + torchLightObject);
             torchLightObject.SetActive(true);
             Debug.Log("Battery inserted! Torch is on.");
+            no48.Despawn(true);
+            no63.Despawn(true);
         }
     }
 
