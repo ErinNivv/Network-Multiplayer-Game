@@ -7,6 +7,7 @@ using Unity.Netcode;
 public class Keypad : NetworkBehaviour
 {
     [SerializeField] private TextMeshProUGUI Ans;
+    [SerializeField] private NetworkObject doorToDespawn;
     public string Answer = "4863";
     public GameObject safeDoor;
     public GameObject keyPad;
@@ -23,6 +24,7 @@ public class Keypad : NetworkBehaviour
             Ans.text = "CORRECT";
             safeDoor.SetActive(false);
             keyPad.SetActive(false);
+            DespawnDoorServerRpc();
         }
         else
         {
@@ -30,6 +32,14 @@ public class Keypad : NetworkBehaviour
         }
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    private void DespawnDoorServerRpc()
+    {
+        if (doorToDespawn != null)
+        {
+            doorToDespawn.Despawn(false);
+        }
+    }
     private IEnumerator ClearText()
     {
         Ans.text = "INVALID";
