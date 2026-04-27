@@ -1,14 +1,12 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
+using Unity.Netcode;
 
-
-public class Keypad : MonoBehaviour
+public class Keypad : NetworkBehaviour
 {
     [SerializeField] private TextMeshProUGUI Ans;
-
     public string Answer = "4863";
     public GameObject safeDoor;
     public GameObject keyPad;
@@ -20,10 +18,11 @@ public class Keypad : MonoBehaviour
 
     public void Execute()
     {
-        if(Ans.text == Answer)
+        if (Ans.text == Answer)
         {
             Ans.text = "CORRECT";
             safeDoor.SetActive(false);
+            keyPad.SetActive(false);
         }
         else
         {
@@ -34,18 +33,18 @@ public class Keypad : MonoBehaviour
     private IEnumerator ClearText()
     {
         Ans.text = "INVALID";
-        yield return new WaitForSeconds(2f); 
-        Ans.text = "";                       
+        yield return new WaitForSeconds(2f);
+        Ans.text = "";
     }
 
     public void Open()
     {
+        Debug.Log("Open called! keyPad is: " + keyPad);
         keyPad.SetActive(true);
     }
+
     public void Close()
     {
         keyPad.SetActive(false);
     }
-
-    
 }

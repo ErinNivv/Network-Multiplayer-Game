@@ -2,6 +2,7 @@ using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
+using System.Collections;
 using UnityEngine.SceneManagement;
 
 
@@ -37,7 +38,12 @@ public class MenuLilitha : MonoBehaviour
         transport.SetConnectionData("0.0.0.0", port);
 
         networkManager.StartHost();
+        StartCoroutine(LoadSceneAfterDelay());
+    }
 
+    private IEnumerator LoadSceneAfterDelay()
+    {
+        yield return new WaitForSeconds(0.5f);
         networkManager.SceneManager.LoadScene("EscapeRoomLilitha", LoadSceneMode.Single);
     }
 

@@ -242,6 +242,7 @@ public class Player : NetworkBehaviour
 
             // check if its a torch
             bool isTorch = netObj.GetComponent<Torch>() != null;
+            Debug.Log("Is torch: " + isTorch + " | Object: " + netObj.name);
             activeHoldPosition = isTorch ? torchHoldPosition : holdPosition;
             Transform targetHoldPosition = isTorch ? torchHoldPosition : holdPosition;
 
@@ -312,7 +313,8 @@ public class Player : NetworkBehaviour
 
             if (hit.collider.CompareTag("Safe"))
             {
-                Keypad keypad = hit.collider.GetComponent<Keypad>();
+                Keypad keypad = hit.collider.GetComponentInParent<Keypad>();
+                if (keypad == null) keypad = hit.collider.GetComponent<Keypad>();
                 if (keypad != null) keypad.Open();
             }
             else if (hit.collider.CompareTag("LightSwitch"))
