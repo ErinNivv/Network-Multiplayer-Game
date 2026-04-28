@@ -5,7 +5,7 @@ public class LightSwitch : NetworkBehaviour
 {
     [SerializeField] private Light[] lights;
 
-    private bool isOn = true;
+    public bool isOn = true;
 
     public void Toggle()
     {
