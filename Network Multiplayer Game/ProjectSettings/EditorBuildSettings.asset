@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/EscapeRoomLilitha.unity
     guid: 020f327a181baf74bb6f816a8529af8e
+  - enabled: 1
+    path: Assets/Scenes/MenuLilitha 1.unity
+    guid: 876321ed8fdf1f84fb776ba0ce9a2182
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
