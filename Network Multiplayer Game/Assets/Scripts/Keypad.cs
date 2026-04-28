@@ -39,7 +39,7 @@ public class Keypad : NetworkBehaviour
     {
         if (doorToDespawn != null)
         {
-            doorToDespawn.Despawn(false);
+            doorToDespawn.Despawn(true);
         }
     }
     private IEnumerator ClearText()
