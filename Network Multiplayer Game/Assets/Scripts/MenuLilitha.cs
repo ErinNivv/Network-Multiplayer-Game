@@ -79,7 +79,7 @@ public class MenuLilitha : MonoBehaviour
         if (NetworkManager.Singleton.ConnectedClientsList.Count >= 2)
         {
             networkManager.OnClientConnectedCallback -= OnPlayerConnected;
-            networkManager.SceneManager.LoadScene("EscapeRoomLilitha", LoadSceneMode.Single);
+            networkManager.SceneManager.LoadScene("EscapeRoomLilitha 1", LoadSceneMode.Single);
         }
     }
 
