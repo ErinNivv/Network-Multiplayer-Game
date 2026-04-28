@@ -1,106 +1,127 @@
 using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
+using Unity.Services.Relay;
+using Unity.Services.Relay.Models;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
 using UnityEngine;
-using System.Collections;
 using UnityEngine.SceneManagement;
-
+using System.Threading.Tasks;
 
 public class MenuLilitha : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] private TMP_InputField ipInput;
-    [SerializeField] private TMP_InputField portInput;
+    [SerializeField] private TMP_InputField joinCodeInput;
+    [SerializeField] private TMPro.TextMeshProUGUI joinCodeDisplay;
+    [SerializeField] private TMPro.TextMeshProUGUI statusText;
 
-    [Header("Defaults")]
-    [SerializeField] private string defaultIP = "127.0.0.1";
-    [SerializeField] private ushort defaultPort = 7777;
+    private NetworkManager networkManager;
+    private UnityTransport transport;
 
-    [SerializeField] private UnityTransport transport;
-    [SerializeField] private NetworkManager networkManager;
-
-    private void Start()
+    private async void Start()
     {
         networkManager = NetworkManager.Singleton;
         transport = networkManager.GetComponent<UnityTransport>();
 
-        if (ipInput) ipInput.text = defaultIP;
-        if (portInput) portInput.text = defaultPort.ToString();
+        // Initialize Unity Services
+        await UnityServices.InitializeAsync();
 
+        if (!AuthenticationService.Instance.IsSignedIn)
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
+        if (statusText) statusText.text = "Ready";
     }
 
-    public void StartHost()
+    public async void StartHost()
     {
-        if(networkManager == null) networkManager = NetworkManager.Singleton;
-        if (transport == null) transport = networkManager.GetComponent<UnityTransport>();
+        if (statusText) statusText.text = "Starting host...";
 
-        ushort port = GetPort();
-        transport.SetConnectionData("0.0.0.0", port);
+        try
+        {
+            // Create relay allocation for max 2 players
+            Allocation allocation = await RelayService.Instance.CreateAllocationAsync(2);
+            string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
 
-        networkManager.OnClientConnectedCallback += OnPlayerConnected;
-        networkManager.StartHost();
-    }
+            transport.SetRelayServerData(
+                allocation.RelayServer.IpV4,
+                (ushort)allocation.RelayServer.Port,
+                allocation.AllocationIdBytes,
+                allocation.Key,
+                allocation.ConnectionData
+            );
 
-    private IEnumerator LoadSceneAfterDelay()
-    {
-        yield return new WaitForSeconds(0.5f);
-        networkManager.SceneManager.LoadScene("EscapeRoomLilitha", LoadSceneMode.Single);
+            networkManager.StartHost();
+
+            // Show join code on screen for client to use
+            if (joinCodeDisplay)
+            {
+                joinCodeDisplay.gameObject.SetActive(true);
+                joinCodeDisplay.text = "Code: " + joinCode;
+            }
+
+            if (statusText) statusText.text = "Hosting...\nWaiting for player...";
+
+            // Listen for client connecting then load scene
+            networkManager.OnClientConnectedCallback += OnPlayerConnected;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Host failed: " + e.Message);
+            if (statusText) statusText.text = "Host failed!";
+        }
     }
 
     private void OnPlayerConnected(ulong clientId)
     {
-        if(!networkManager.IsHost) return;
+        if (!networkManager.IsHost) return;
 
-        if(NetworkManager.Singleton.ConnectedClientsList.Count >= 2)
+        if (NetworkManager.Singleton.ConnectedClientsList.Count >= 2)
         {
             networkManager.OnClientConnectedCallback -= OnPlayerConnected;
             networkManager.SceneManager.LoadScene("EscapeRoomLilitha", LoadSceneMode.Single);
         }
     }
 
-    public void JoinGame()
+    public async void JoinGame()
     {
-        if (networkManager == null) networkManager = NetworkManager.Singleton;
-        if (transport == null) transport = networkManager.GetComponent<UnityTransport>();
+        if (networkManager.IsClient || networkManager.IsHost)
+        {
+            Debug.LogWarning("Already connected!");
+            return;
+        }
 
-        string ip = GetIP();
-        ushort port = GetPort();
-        transport.SetConnectionData(ip, port);
+        string code = joinCodeInput.text.Trim();
 
-        networkManager.OnClientConnectedCallback += OnClientConnected;
-        networkManager.StartClient();
-    }
+        if (string.IsNullOrEmpty(code))
+        {
+            if (statusText) statusText.text = "Enter a join code!";
+            return;
+        }
 
-    private void OnClientConnected(ulong clientId)
-    {
-        networkManager.OnClientConnectedCallback -= OnClientConnected;
+        if (statusText) statusText.text = "Connecting...";
 
-        Debug.Log($"[Menu] Client {clientId} connected successfully");
-    }
+        try
+        {
+            JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(code);
 
-    public void StartServerOnly()
-    {
-        if (networkManager == null) networkManager = NetworkManager.Singleton;
-        if (transport == null) transport = networkManager.GetComponent<UnityTransport>();
+            transport.SetRelayServerData(
+                allocation.RelayServer.IpV4,
+                (ushort)allocation.RelayServer.Port,
+                allocation.AllocationIdBytes,
+                allocation.Key,
+                allocation.ConnectionData,
+                allocation.HostConnectionData
+            );
 
-        ushort port = GetPort();
-        transport.SetConnectionData("0.0.0.0", port);
-        networkManager.StartServer();
-    }
+            networkManager.StartClient();
 
-    private string GetIP()
-    {
-        if (!ipInput || string.IsNullOrWhiteSpace(ipInput.text))
-            return defaultIP;
-
-        return ipInput.text.Trim();
-    }
-
-    private ushort GetPort()
-    {
-        if (!portInput || !ushort.TryParse(portInput.text, out ushort port))
-            return defaultPort;
-
-        return port;
+            if (statusText) statusText.text = "Connected!\nWaiting for host to start...";
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Join failed: " + e.Message);
+            if (statusText) statusText.text = "Join failed!\nCheck your code.";
+        }
     }
 }
