@@ -37,14 +37,25 @@ public class MenuLilitha : MonoBehaviour
         ushort port = GetPort();
         transport.SetConnectionData("0.0.0.0", port);
 
+        networkManager.OnClientConnectedCallback += OnPlayerConnected;
         networkManager.StartHost();
-        StartCoroutine(LoadSceneAfterDelay());
     }
 
     private IEnumerator LoadSceneAfterDelay()
     {
         yield return new WaitForSeconds(0.5f);
         networkManager.SceneManager.LoadScene("EscapeRoomLilitha", LoadSceneMode.Single);
+    }
+
+    private void OnPlayerConnected(ulong clientId)
+    {
+        if(!networkManager.IsHost) return;
+
+        if(NetworkManager.Singleton.ConnectedClientsList.Count >= 2)
+        {
+            networkManager.OnClientConnectedCallback -= OnPlayerConnected;
+            networkManager.SceneManager.LoadScene("EscapeRoomLilitha", LoadSceneMode.Single);
+        }
     }
 
     public void JoinGame()
