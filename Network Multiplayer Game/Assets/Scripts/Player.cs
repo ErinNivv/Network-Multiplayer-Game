@@ -138,8 +138,7 @@ public class Player : NetworkBehaviour
 
     private System.Collections.IEnumerator EnableCCAfterDelay()
     {
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(0.5f);
         cc.enabled = true;
     }
 
