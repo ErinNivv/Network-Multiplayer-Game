@@ -38,6 +38,10 @@ public class Player : NetworkBehaviour
     [Header("Animations")]
     [SerializeField] private Animator animator;
 
+    [Header("UI Prompts")]
+    [SerializeField] private GameObject interactPrompt;
+    [SerializeField] private GameObject pickupPrompt;
+
     public override void OnNetworkSpawn()
     {
         cc = GetComponent<CharacterController>();
@@ -143,6 +147,35 @@ public class Player : NetworkBehaviour
     {
         HandleMovement();
         HandleLook();
+        HandlePrompts();
+    }
+
+    private void HandlePrompts()
+    {
+        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+
+        
+        int pickupMask = LayerMask.GetMask("PickUp");
+        if (Physics.Raycast(ray, out RaycastHit pickupHit, grabRange, pickupMask))
+        {
+            pickupPrompt.SetActive(true);
+            interactPrompt.SetActive(false);
+            return;
+        }
+
+       
+        if (Physics.Raycast(ray, out RaycastHit interactHit, 3f))
+        {
+            bool isInteractable = interactHit.collider.CompareTag("Safe") ||
+                                  interactHit.collider.CompareTag("LightSwitch");
+            interactPrompt.SetActive(isInteractable);
+            pickupPrompt.SetActive(false);
+            return;
+        }
+
+        
+        interactPrompt.SetActive(false);
+        pickupPrompt.SetActive(false);
     }
     private void FixedUpdate()
     {

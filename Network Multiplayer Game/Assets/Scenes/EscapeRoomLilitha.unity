@@ -27978,6 +27978,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 65f84401bd91dcf45aafd7cb3cda70e4, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7133015990535077043}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 65f84401bd91dcf45aafd7cb3cda70e4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7133015990535077044}
   m_SourcePrefab: {fileID: 100100000, guid: 65f84401bd91dcf45aafd7cb3cda70e4, type: 3}
 --- !u!1 &451076752986917665 stripped
 GameObject:
@@ -29596,6 +29599,18 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &7133015990535077044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 451076752986917665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dec7e89dff1dbcf48a975378b0aba10d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatuePickup
 --- !u!54 &7133015991348449957
 Rigidbody:
   m_ObjectHideFlags: 0

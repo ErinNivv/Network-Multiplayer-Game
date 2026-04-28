@@ -12,6 +12,7 @@ public class Keypad : NetworkBehaviour
     public GameObject safeDoor;
     public GameObject keyPad;
 
+    public static bool isSafeOpen = false;
     public void Number(int number)
     {
         Ans.text += number.ToString();
@@ -24,6 +25,7 @@ public class Keypad : NetworkBehaviour
             Ans.text = "CORRECT";
             safeDoor.SetActive(false);
             keyPad.SetActive(false);
+            isSafeOpen = true; // safe is now open
             DespawnDoorServerRpc();
         }
         else
